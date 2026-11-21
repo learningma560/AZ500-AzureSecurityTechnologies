@@ -1,3 +1,5 @@
+> **Unofficial archived copy** of `MicrosoftLearning/AZ500-AzureSecurityTechnologies`, restored from the Wayback Machine (snapshot 2025-02-21). Not affiliated with or endorsed by Microsoft. Original MIT license preserved - see [NOTICE.md](NOTICE.md) and [LICENSE](LICENSE).
+
 # AZ-500: Microsoft Azure Security Technologies
 
 - **[Link to labs (HTML format)](https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies/)**
