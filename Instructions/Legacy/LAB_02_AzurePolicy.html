@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>
+            AZ500-AzureSecurityTechnologies
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="assets/style.css">
+    </head>
+    <body data-spy="scroll" data-target="#linksMenu">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gray">
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-white" href="https://docs.microsoft.com/training/">
+                <img src="assets/microsoft-gray.png" alt="Microsoft logo" style="width:100px;height:21px;"/>
+            </a>
+            <span class="my-1 title text-black">Microsoft Learn</span>
+            <span class="ml-2"><a href="https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies">&#8801;</a></span>
+        </div>
+        <!--
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-azure text-uppercase" href="https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies">
+                AZ500-AzureSecurityTechnologies
+            </a>
+            <a href="https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies" target="_blank" class="btn btn-sm btn-outline-secondary text-light">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <span class="ml-2">GitHub</span>
+            </a>
+        </div>
+        -->
+    </nav>
+    <hr color-"gray"/>
+    <div class="container">
+        <main class="row extra-padding">
+            <aside class="col-sm-2">       
+                <nav id="linksMenu" class="toc sticky-top">
+                    <ul class="nav navbar-nav flex-column">
+                    </ul>
+                </nav>         
+            </aside>
+            <hr class="" />
+            <article class="col-sm-10 mb-5">
+                <h1 id="lab-02-azure-policy">Lab 02: Azure Policy</h1>
+<h1 id="student-lab-manual">Student lab manual</h1>
+
+<h2 id="lab-scenario">Lab scenario</h2>
+
+<p>You have been asked to create a proof of concept showing how Azure policy can be used. Specifically, you need to:</p>
+
+<ul>
+  <li>Create an Allowed Locations policy that ensures resource are only created in a specific region.</li>
+  <li>Test to ensure resources are only created in the Allowed location</li>
+</ul>
+
+<blockquote>
+  <p>For all the resources in this lab, we are using the <strong>East US</strong> region. Verify with your instructor this is the region to use for class.</p>
+</blockquote>
+
+<h2 id="lab-objectives">Lab objectives</h2>
+
+<p>In this lab, you will complete the following:</p>
+
+<ul>
+  <li>Exercise 1: Implement Azure Policy.</li>
+</ul>
+
+<h2 id="azure-policy-diagram">Azure Policy diagram</h2>
+
+<p><img src="assets/157511920-19c1f06c-86bd-440d-80ac-d96aa27aefff.png" alt="image" /></p>
+
+<h2 id="instructions">Instructions</h2>
+
+<h3 id="exercise-1-implement-azure-policy">Exercise 1: Implement Azure Policy</h3>
+
+<h4 id="estimated-timing-20-minutes">Estimated timing: 20 minutes</h4>
+
+<p>In this exercise, you will complete the following tasks:</p>
+
+<ul>
+  <li>Task 1: Create an Azure resource group.</li>
+  <li>Task 2: Create an Allowed Locations policy assignment.</li>
+  <li>Task 3: Verify the Allowed Locations policy assignment is working.</li>
+</ul>
+
+<h4 id="task-1-create-a-resource-group-for-the-lab">Task 1: Create a resource group for the lab.</h4>
+
+<p>In this task, you will create a resource group for the lab.</p>
+
+<ol>
+  <li>
+    <p>Sign-in to the Azure portal <strong><code>https://portal.azure.com/</code></strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Sign in to the Azure portal using an account that has the Owner or Contributor role in the Azure subscription you are using for this lab.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Open the Cloud Shell by clicking the first icon in the top right of the Azure Portal. If prompted, select <strong>PowerShell</strong> and <strong>Create storage</strong>.</p>
+  </li>
+  <li>
+    <p>Ensure <strong>PowerShell</strong> is selected in the drop-down menu in the upper-left corner of the Cloud Shell pane.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to create a resource group (verify with your instructor regarding the value of the location parameter):</p>
+
+    <pre><code class="language-powershell"> New-AzResourceGroup -Name AZ500LAB02 -Location 'East US'
+    
+ Confirm
+ Provided resource group already exists. Are you sure you want to update it?
+ [Y] Yes [N] No [S] Suspend [?] Help (default is "Y"): Y
+</code></pre>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, type <strong>Y</strong> and press the Enter key.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to list resource groups to verify that the new resource group was created:</p>
+
+    <pre><code class="language-powershell"> Get-AzResourceGroup | format-table
+</code></pre>
+  </li>
+  <li>
+    <p>Close the <strong>Cloud Shell</strong>.</p>
+  </li>
+</ol>
+
+<h4 id="task-2-create-an-allowed-locations-policy-assignment">Task 2: Create an Allowed Locations policy assignment.</h4>
+
+<p>In this task, you will create an Allowed Locations policy assignment and specify which Azure regions the policy can use.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Policy</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Policy</strong> blade, in the <strong>Authoring</strong> section, select <strong>Definitions</strong>.</p>
+  </li>
+  <li>
+    <p>Take a minute to browse the built-in definitions. Use the <strong>Category</strong> drop-down to filter the list of policies.</p>
+  </li>
+  <li>
+    <p>In the <strong>Search</strong> text box, type <strong>Allowed locations</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: The <strong>Allowed locations</strong> policy allows you to restrict location of resources, not resource groups. To restrict locations of resource groups, you can use the <strong>Allowed locations for resource groups</strong> policy.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Click the <strong>Allowed locations</strong> policy definition to display its details..</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: This policy definition takes an array of locations as parameters. A policy rule is an ‘if-then’ statement. The ‘if’ clause checks if the resource location is included in the parameter list, and if not, the ‘then’ clause denies the resource creation or, for existing resources, marks them as non-compliant.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>On the <strong>Allowed locations</strong> blade, click <strong>Assign</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Basics</strong> tab of the <strong>Allowed locations</strong> blade, click the Ellipsis (…) button next to the <strong>Scope</strong> text box and, on the <strong>Scope</strong> blade, specify the following settings:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Subscription</td>
+          <td>the name of you Azure subscription</td>
+        </tr>
+        <tr>
+          <td>Resource group</td>
+          <td><strong>AZ500LAB02</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Select</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Allowed locations</strong> blade, on the <strong>Basics</strong> tab, specify the following settings (leave others with their defualt values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Assignment name</td>
+          <td><strong>Allow UK South for AZ500LAB02</strong></td>
+        </tr>
+        <tr>
+          <td>Description</td>
+          <td><strong>Allow resources to be created in UK South Only for AZ500LAB02</strong></td>
+        </tr>
+        <tr>
+          <td>Policy enforcement</td>
+          <td><strong>Enabled</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Next</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Parameters</strong> tab of the <strong>Allowed locations</strong> blade, in the <strong>Allowed locations</strong> drop-down list, select <strong>UK South</strong> as the only allowed location.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: You can select more than one location. If the policy required a different set of parameters, this tab would provide those selections.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Click <strong>Review + create</strong>, followed by <strong>Create</strong> to create the policy assignment.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: You will see a notification that the assignment was successful, and that the assignment might take around 30 minutes to complete.</p>
+    </blockquote>
+
+    <blockquote>
+      <p><strong>Note</strong>: The reason the Azure policy assignment might take up to 30 minutes to take effect is that is has to replicate globally. Typically this takes only a few minutes.  If the next task fails, simply wait a few minutes and attempt its steps again.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-3-test-the-allowed-locations-policy-assignment">Task 3: Test the Allowed Locations policy assignment</h4>
+
+<p>In this task, you will test the Allowed Locations policy assignment.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Virtual networks</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Virtual Networks</strong> blade, click <strong>+ Create</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: First, you will try to create a virtual network in East US. Since this is not an allowed location, the request should be blocked.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>On the <strong>Basics</strong> tab of the <strong>Create virtual network</strong> blade, specify the following settings (leave others with their defualt values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Resource group</td>
+          <td><strong>AZ500LAB02</strong></td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td><strong>myVnet</strong></td>
+        </tr>
+        <tr>
+          <td>Region</td>
+          <td><strong>East US</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Review + create</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Review + create</strong> tab of the <strong>Create virtual network</strong> blade note the <strong>Validation failed</strong> message.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: If the <strong>Validation Failed</strong> warning does not appear, click <strong>Previous</strong> and wait a few more minutes.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>On the <strong>Basics</strong> tab, click the error message link to open the <strong>Policy Assignment</strong> blade. You will see the policy assignment that restricts the location.</p>
+  </li>
+  <li>
+    <p>Close the <strong>Policy Assignment</strong> blade, on the <strong>Create virtual network</strong> blade, click the <strong>Basics</strong> tab, and, in the <strong>Region</strong> drop-down list, select <strong>UK South</strong>.</p>
+  </li>
+  <li>
+    <p>Click <strong>Review + create</strong>, verify that validation passed, click <strong>Create</strong>, and verify that the virtual network was created successfully.</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>Exercise results: In this exercise, you learned to apply an Azure policy by selecting a built-in policy definitions and assigning it to a resource group.</p>
+</blockquote>
+
+<p><strong>Clean up resources</strong></p>
+
+<blockquote>
+  <p>Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs.</p>
+</blockquote>
+
+<ol>
+  <li>
+    <p>In the Azure portal, open the Cloud Shell by clicking the first icon in the top right of the Azure Portal. If prompted, click <strong>Reconnect</strong>.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to remove the resource group you created in this lab:</p>
+
+    <pre><code class="language-powershell"> Remove-AzResourceGroup -Name "AZ500LAB02" -Force -AsJob
+</code></pre>
+  </li>
+  <li>
+    <p>Close the <strong>Cloud Shell</strong> pane.</p>
+  </li>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Policy</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>In the Authoring section, select <strong>Assignments</strong>.</p>
+  </li>
+  <li>
+    <p>In the list of assignments, select the name of the <strong>Allowed Locations</strong> policy that you created in this lab.</p>
+  </li>
+  <li>
+    <p>On the policy assignment, select <strong>Delete assignment</strong>, and then select <strong>Yes</strong>.</p>
+  </li>
+</ol>
+
+            </article>
+        </main>
+    </div>
+    <footer class="fixed-bottom d-print-none">
+        <nav class="navbar navbar-light bg-light d-flex justify-content-around">
+            <span class="navbar-text">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <a href="https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies" target="_blank" class="ml-2">
+                    MicrosoftLearning/AZ500-AzureSecurityTechnologies
+                </a>
+            </span>
+        </nav>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="assets/script.js"></script>
+</body>
+
+</html>

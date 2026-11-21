@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>
+            AZ500-AzureSecurityTechnologies
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="assets/style.css">
+    </head>
+    <body data-spy="scroll" data-target="#linksMenu">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gray">
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-white" href="https://docs.microsoft.com/training/">
+                <img src="assets/microsoft-gray.png" alt="Microsoft logo" style="width:100px;height:21px;"/>
+            </a>
+            <span class="my-1 title text-black">Microsoft Learn</span>
+            <span class="ml-2"><a href="https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies">&#8801;</a></span>
+        </div>
+        <!--
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-azure text-uppercase" href="https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies">
+                AZ500-AzureSecurityTechnologies
+            </a>
+            <a href="https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies" target="_blank" class="btn btn-sm btn-outline-secondary text-light">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <span class="ml-2">GitHub</span>
+            </a>
+        </div>
+        -->
+    </nav>
+    <hr color-"gray"/>
+    <div class="container">
+        <main class="row extra-padding">
+            <aside class="col-sm-2">       
+                <nav id="linksMenu" class="toc sticky-top">
+                    <ul class="nav navbar-nav flex-column">
+                    </ul>
+                </nav>         
+            </aside>
+            <hr class="" />
+            <article class="col-sm-10 mb-5">
+                <h1 id="lab-08-azure-firewall">Lab 08: Azure Firewall</h1>
+<h1 id="student-lab-manual">Student lab manual</h1>
+
+<h2 id="lab-scenario">Lab scenario</h2>
+
+<p>You have been asked to install Azure Firewall. This will help your organization control inbound and outbound network access which is an important part of an overall network security plan. Specifically, you would like to create and test the following infrastructure components:</p>
+
+<ul>
+  <li>A virtual network with a workload subnet and a jump host subnet.</li>
+  <li>A virtual machine is each subnet.</li>
+  <li>A custom route that ensures all outbound workload traffic from the workload subnet must use the firewall.</li>
+  <li>Firewall Application rules that only allow outbound traffic to www.bing.com.</li>
+  <li>Firewall Network rules that allow external DNS server lookups.</li>
+</ul>
+
+<blockquote>
+  <p>For all the resources in this lab, we are using the <strong>East US</strong> region. Verify with your instructor this is the region to use for class.</p>
+</blockquote>
+
+<h2 id="lab-objectives">Lab objectives</h2>
+
+<p>In this lab, you will complete the following exercise:</p>
+
+<ul>
+  <li>Exercise 1: Deploy and test an Azure Firewall</li>
+</ul>
+
+<h2 id="azure-firewall-diagram">Azure Firewall diagram</h2>
+
+<p><img src="assets/157529954-a1bc434b-2eca-41c1-b875-1f0c977d5e20.png" alt="image" /></p>
+
+<h2 id="instructions">Instructions</h2>
+
+<h2 id="lab-files">Lab files:</h2>
+
+<ul>
+  <li><strong>\Allfiles\Labs\08\template.json</strong></li>
+</ul>
+
+<h3 id="exercise-1-deploy-and-test-an-azure-firewall">Exercise 1: Deploy and test an Azure Firewall</h3>
+
+<h3 id="estimated-timing-40-minutes">Estimated timing: 40 minutes</h3>
+
+<blockquote>
+  <p>For all the resources in this lab, we are using the <strong>East (US)</strong> region. Verify with your instructor this is region to use for you class.</p>
+</blockquote>
+
+<p>In this exercise, you will complete the following tasks:</p>
+
+<ul>
+  <li>Task 1: Use a template to deploy the lab environment.</li>
+  <li>Task 2: Deploy an Azure firewall.</li>
+  <li>Task 3: Create a default route.</li>
+  <li>Task 4: Configure an application rule.</li>
+  <li>Task 5: Configure a network rule.</li>
+  <li>Task 6: Configure DNS servers.</li>
+  <li>Task 7: Test the firewall.</li>
+</ul>
+
+<h4 id="task-1-use-a-template-to-deploy-the-lab-environment">Task 1: Use a template to deploy the lab environment.</h4>
+
+<p>In this task, you will review and deploy the lab environment.</p>
+
+<p>In this task, you will create a virtual machine by using an ARM template. This virtual machine will be used in the last exercise for this lab.</p>
+
+<ol>
+  <li>
+    <p>Sign-in to the Azure portal <strong><code>https://portal.azure.com/</code></strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Sign in to the Azure portal using an account that has the Owner or Contributor role in the Azure subscription you are using for this lab.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Deploy a custom template</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Custom deployment</strong> blade, click the <strong>Build your own template in the editor</strong> option.</p>
+  </li>
+  <li>
+    <p>On the <strong>Edit template</strong> blade, click <strong>Load file</strong>, locate the <strong>\Allfiles\Labs\08\template.json</strong> file and click <strong>Open</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Review the content of the template and note that it deploys an Azure VM hosting Windows Server 2016 Datacenter.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>On the <strong>Edit template</strong> blade, click <strong>Save</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Custom deployment</strong> blade, ensure that the following settings are configured (leave any others with their default values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Subscription</td>
+          <td>the name of the Azure subscription you will be using in this lab</td>
+        </tr>
+        <tr>
+          <td>Resource group</td>
+          <td>click <strong>Create new</strong> and type the name <strong>AZ500LAB08</strong></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td><strong>(US) East US</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <blockquote>
+      <p><strong>Note</strong>: To identify Azure regions where you can provision Azure VMs, refer to <a href="https://azure.microsoft.com/en-us/regions/offers/"><strong>https://azure.microsoft.com/en-us/regions/offers/</strong></a></p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Click <strong>Review + create</strong>, and then click <strong>Create</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Wait for the deployment to complete. This should take about 2 minutes.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-2-deploy-the-azure-firewall">Task 2: Deploy the Azure firewall</h4>
+
+<p>In this task you will deploy the Azure firewall into the virtual network.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Firewalls</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Firewalls</strong> blade, click <strong>+ Create</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Basics</strong> tab of the <strong>Create a firewall</strong> blade, specify the following settings (leave others with their default values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Resource group</td>
+          <td><strong>AZ500LAB08</strong></td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td><strong>Test-FW01</strong></td>
+        </tr>
+        <tr>
+          <td>Region</td>
+          <td><strong>(US) East US</strong></td>
+        </tr>
+        <tr>
+          <td>Firewall SKU</td>
+          <td><strong>Standard</strong></td>
+        </tr>
+        <tr>
+          <td>Firewall management</td>
+          <td><strong>Use Firewall rules (classic) to manage this firewall</strong></td>
+        </tr>
+        <tr>
+          <td>Choose a virtual network</td>
+          <td>click the <strong>Use existing</strong> option and, in the drop-down list, select <strong>Test-FW-VN</strong></td>
+        </tr>
+        <tr>
+          <td>Public IP address</td>
+          <td>clck <strong>Add new</strong> and type the name <strong>TEST-FW-PIP</strong> and click <strong>OK</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Review + create</strong> and then click <strong>Create</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Wait for the deployment to complete. This should take about 5 minutes.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Resource groups</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Resource groups</strong> blade, in the list of resource group, click the <strong>AZ500LAB08</strong> entry.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: On the <strong>AZ500LAB08</strong> resource group blade, review the list of resources. You can sort by <strong>Type</strong>.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>In the list of resources, click the entry representing the <strong>Test-FW01</strong> firewall.</p>
+  </li>
+  <li>
+    <p>On the <strong>Test-FW01</strong> blade, identify the <strong>Private IP</strong> address that was assigned to the firewall.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: You will need this information in the next task.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-3-create-a-default-route">Task 3: Create a default route</h4>
+
+<p>In this task, you will create a default route for the <strong>Workload-SN</strong> subnet. This route will configure outbound traffic through the firewall.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Route tables</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Route tables</strong> blade, click <strong>+ Create</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Create route table</strong> blade, specify the following settings:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Resource group</td>
+          <td><strong>AZ500LAB08</strong></td>
+        </tr>
+        <tr>
+          <td>Region</td>
+          <td><strong>East US</strong></td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td><strong>Firewall-route</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Review + create</strong>, then click <strong>Create</strong>, and wait for the provisioning to complete.</p>
+  </li>
+  <li>
+    <p>On the <strong>Route tables</strong> blade, click <strong>Refresh</strong>, and, in the list of route tables, click the <strong>Firewall-route</strong> entry.</p>
+  </li>
+  <li>
+    <p>On the <strong>Firewall-route</strong> blade, in the <strong>Settings</strong> section, click <strong>Subnets</strong> and then, on the <strong>Firewall-route | Subnets</strong> blade, click <strong>+ Associate</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Associate subnet</strong> blade, specify the following settings:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Virtual network</td>
+          <td><strong>Test-FW-VN</strong></td>
+        </tr>
+        <tr>
+          <td>Subnet</td>
+          <td><strong>Workload-SN</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <blockquote>
+      <p><strong>Note</strong>: Ensure the <strong>Workload-SN</strong> subnet is selected for this route, otherwise the firewall won’t work correctly.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Click <strong>OK</strong> to associate the firewall to the virtual network subnet.</p>
+  </li>
+  <li>
+    <p>Back on the <strong>Firewall-route</strong> blade, in the <strong>Settings</strong> section, click <strong>Routes</strong> and then click <strong>+ Add</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Add route</strong> blade, specify the following settings:</p>
+  </li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th>Setting</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Route name</td>
+      <td><strong>FW-DG</strong></td>
+    </tr>
+    <tr>
+      <td>Address prefix destination</td>
+      <td><strong>IP Address</strong></td>
+    </tr>
+    <tr>
+      <td>Destination IP addresses/CIDR ranges</td>
+      <td><strong>0.0.0.0/0</strong></td>
+    </tr>
+    <tr>
+      <td>Next hop type</td>
+      <td><strong>Virtual appliance</strong></td>
+    </tr>
+    <tr>
+      <td>Next hop address</td>
+      <td>the private IP address of the firewall that you identified in the previous task</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code>&gt;**Note**: Azure Firewall is actually a managed service, but virtual appliance works in this situation.
+</code></pre>
+
+<ol>
+  <li>Click <strong>Add</strong> to add the route.</li>
+</ol>
+
+<h4 id="task-4-configure-an-application-rule">Task 4: Configure an application rule</h4>
+
+<p>In this task you will create an application rule that allows outbound access to <code>www.bing.com</code>.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, navigate back to the <strong>Test-FW01</strong> firewall.</p>
+  </li>
+  <li>
+    <p>On the <strong>Test-FW01</strong> blade, in the <strong>Settings</strong> section, click <strong>Rules (classic)</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Test-FW01 | Rules (classic)</strong> blade, click the <strong>Application rule collection</strong> tab, and then click <strong>+ Add application rule collection</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Add application rule collection</strong> blade, specify the following settings (leave others with their default values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td><strong>App-Coll01</strong></td>
+        </tr>
+        <tr>
+          <td>Priority</td>
+          <td><strong>200</strong></td>
+        </tr>
+        <tr>
+          <td>Action</td>
+          <td><strong>Allow</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>On the <strong>Add application rule collection</strong> blade, create a new entry in the <strong>Target FQDNs</strong> section with the following settings (leave others with their default values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>name</td>
+          <td><strong>AllowGH</strong></td>
+        </tr>
+        <tr>
+          <td>Source type</td>
+          <td><strong>IP Address</strong></td>
+        </tr>
+        <tr>
+          <td>Source</td>
+          <td><strong>10.0.2.0/24</strong></td>
+        </tr>
+        <tr>
+          <td>Protocol port</td>
+          <td><strong>http:80, https:443</strong></td>
+        </tr>
+        <tr>
+          <td>Target FQDNS</td>
+          <td><strong>www.bing.com</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Add</strong> to add the Target FQDNs-based application rule.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Azure Firewall includes a built-in rule collection for infrastructure FQDNs that are allowed by default. These FQDNs are specific for the platform and can’t be used for other purposes.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-5-configure-a-network-rule">Task 5: Configure a network rule</h4>
+
+<p>In this task, you will create a network rule that allows outbound access to two IP addresses on port 53 (DNS).</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, navigate back to the <strong>Test-FW01 | Rules (classic)</strong> blade.</p>
+  </li>
+  <li>
+    <p>On the <strong>Test-FW01 | Rules (classic)</strong> blade, click the <strong>Network rule collection</strong> tab and then click <strong>+ Add network rule collection</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Add network rule collection</strong> blade, specify the following settings (leave others with their default values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td><strong>Net-Coll01</strong></td>
+        </tr>
+        <tr>
+          <td>Priority</td>
+          <td><strong>200</strong></td>
+        </tr>
+        <tr>
+          <td>Action</td>
+          <td><strong>Allow</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>On the <strong>Add network rule collection</strong> blade, create a new entry in the <strong>IP Addresses</strong> section with the following settings (leave others with their default values):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td><strong>AllowDNS</strong></td>
+        </tr>
+        <tr>
+          <td>Protocol</td>
+          <td><strong>UDP</strong></td>
+        </tr>
+        <tr>
+          <td>Source type</td>
+          <td><strong>IP address</strong></td>
+        </tr>
+        <tr>
+          <td>Source Addresses</td>
+          <td><strong>10.0.2.0/24</strong></td>
+        </tr>
+        <tr>
+          <td>Destination type</td>
+          <td><strong>IP address</strong></td>
+        </tr>
+        <tr>
+          <td>Destination Address</td>
+          <td><strong>209.244.0.3,209.244.0.4</strong></td>
+        </tr>
+        <tr>
+          <td>Destination Ports</td>
+          <td><strong>53</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>Add</strong> to add the network rule.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: The destination addresses used in this case are known public DNS servers.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-6-configure-the-virtual-machine-dns-servers">Task 6: Configure the virtual machine DNS servers</h4>
+
+<p>In this task, you will configure the primary and secondary DNS addresses for the virtual machine. This is not a firewall requirement.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, navigate back to the <strong>AZ500LAB08</strong> resource group.</p>
+  </li>
+  <li>
+    <p>On the <strong>AZ500LAB08</strong> blade, in the list of resources, click the <strong>Srv-Work</strong> virtual machine.</p>
+  </li>
+  <li>
+    <p>On the <strong>Srv-Work</strong> blade, in the <strong>Settings</strong> section, click <strong>Networking</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Srv-Work | Networking</strong> blade, click the link next to the <strong>Network interface</strong> entry.</p>
+  </li>
+  <li>
+    <p>On the network interface blade, in the <strong>Settings</strong> section, click <strong>DNS servers</strong>, select the <strong>Custom</strong> option, add the two DNS servers referenced in the network rule: <strong>209.244.0.3</strong> and <strong>209.244.0.4</strong>, and click <strong>Save</strong> to save the change.</p>
+  </li>
+  <li>
+    <p>Return to the <strong>Srv-Work</strong> virtual machine page.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Wait for the update to complete.</p>
+    </blockquote>
+
+    <blockquote>
+      <p><strong>Note</strong>: Updating the DNS servers for a network interface will automatically restart the virtual machine to which that interface is attached, and if applicable, any other virtual machines in the same availability set.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-7-test-the-firewall">Task 7: Test the firewall</h4>
+
+<p>In this task, you will test the firewall to confirm that it works as expected.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, navigate back to the <strong>AZ500LAB08</strong> resource group.</p>
+  </li>
+  <li>
+    <p>On the <strong>AZ500LAB08</strong> blade, in the list of resources, click the <strong>Srv-Jump</strong> virtual machine.</p>
+  </li>
+  <li>
+    <p>On the <strong>Srv-Jump</strong> blade, click <strong>Connect</strong> and, in the drop down menu, click <strong>RDP</strong>.</p>
+  </li>
+  <li>
+    <p>Click <strong>Download RDP File</strong> and use it to connect to the <strong>Srv-Jump</strong> Azure VM via Remote Desktop. When prompted to authenticate, provide the following credntials:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>User name</td>
+          <td><strong>localadmin</strong></td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td><strong>Pa55w.rd1234</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <blockquote>
+      <p><strong>Note</strong>: The following steps are performed in the Remote Desktop session to the <strong>Srv-Jump</strong> Azure VM.</p>
+    </blockquote>
+
+    <blockquote>
+      <p><strong>Note</strong>: You will connect to the <strong>Srv-Work</strong> virtual machine. This is being done so we can test the ability to access the bing.com website.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Within the Remote Desktop session to <strong>Srv-Jump</strong>, right-click <strong>Start</strong>, in the right-click menu, click <strong>Run</strong>, and, from the <strong>Run</strong> dialog box, run the following to connect to <strong>Srv-Work</strong>.</p>
+
+    <pre><code> mstsc /v:Srv-Work
+</code></pre>
+  </li>
+  <li>
+    <p>When prompted to authenticate, provide the following credentials:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>User name</td>
+          <td><strong>localadmin</strong></td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td><strong>Pa55w.rd1234</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <blockquote>
+      <p><strong>Note</strong>: Wait for the Remote Desktop session to be established and the Server Manager interface to load.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Within the Remote Desktop session to <strong>Srv-Work</strong>, in <strong>Server Manager</strong>, click <strong>Local Server</strong> and then click <strong>IE Enhanced Security Configuration</strong>.</p>
+  </li>
+  <li>
+    <p>In the <strong>Internet Explorer Enhanced Security Configuration</strong> dialog box, set both options to <strong>Off</strong> and click <strong>OK</strong>.</p>
+  </li>
+  <li>
+    <p>Within the Remote Desktop session to <strong>Srv-Work</strong>, start Internet Explorer and browse to <strong><code>https://www.bing.com</code></strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: The website should successfully display. The firewall allows you access.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Browse to <strong><code>http://www.microsoft.com/</code></strong></p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Within the browser page, you should receive a message with text resembling the following: <code>HTTP request from 10.0.2.4:xxxxx to microsoft.com:80. Action: Deny. No rule matched. Proceeding with default action.</code> This is expected, since the firewall blocks access to this website.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Terminate both Remote Desktop sessions.</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>Result: You have successfully configured and tested the Azure Firewall.</p>
+</blockquote>
+
+<p><strong>Clean up resources</strong></p>
+
+<blockquote>
+  <p>Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs.</p>
+</blockquote>
+
+<ol>
+  <li>
+    <p>In the Azure portal, open the Cloud Shell by clicking the first icon in the top right of the Azure Portal. If prompted, click <strong>PowerShell</strong> and <strong>Create storage</strong>.</p>
+  </li>
+  <li>
+    <p>Ensure <strong>PowerShell</strong> is selected in the drop-down menu in the upper-left corner of the Cloud Shell pane.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to remove the resource group you created in this lab:</p>
+
+    <pre><code class="language-powershell"> Remove-AzResourceGroup -Name "AZ500LAB08" -Force -AsJob
+</code></pre>
+  </li>
+  <li>
+    <p>Close the <strong>Cloud Shell</strong> pane.</p>
+  </li>
+</ol>
+
+            </article>
+        </main>
+    </div>
+    <footer class="fixed-bottom d-print-none">
+        <nav class="navbar navbar-light bg-light d-flex justify-content-around">
+            <span class="navbar-text">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <a href="https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies" target="_blank" class="ml-2">
+                    MicrosoftLearning/AZ500-AzureSecurityTechnologies
+                </a>
+            </span>
+        </nav>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="assets/script.js"></script>
+</body>
+
+</html>

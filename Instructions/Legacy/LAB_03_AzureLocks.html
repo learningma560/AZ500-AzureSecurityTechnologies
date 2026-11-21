@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>
+            AZ500-AzureSecurityTechnologies
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="assets/style.css">
+    </head>
+    <body data-spy="scroll" data-target="#linksMenu">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gray">
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-white" href="https://docs.microsoft.com/training/">
+                <img src="assets/microsoft-gray.png" alt="Microsoft logo" style="width:100px;height:21px;"/>
+            </a>
+            <span class="my-1 title text-black">Microsoft Learn</span>
+            <span class="ml-2"><a href="https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies">&#8801;</a></span>
+        </div>
+        <!--
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-azure text-uppercase" href="https://microsoftlearning.github.io/AZ500-AzureSecurityTechnologies">
+                AZ500-AzureSecurityTechnologies
+            </a>
+            <a href="https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies" target="_blank" class="btn btn-sm btn-outline-secondary text-light">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <span class="ml-2">GitHub</span>
+            </a>
+        </div>
+        -->
+    </nav>
+    <hr color-"gray"/>
+    <div class="container">
+        <main class="row extra-padding">
+            <aside class="col-sm-2">       
+                <nav id="linksMenu" class="toc sticky-top">
+                    <ul class="nav navbar-nav flex-column">
+                    </ul>
+                </nav>         
+            </aside>
+            <hr class="" />
+            <article class="col-sm-10 mb-5">
+                <h1 id="lab-03-resource-manager-locks">Lab 03: Resource Manager Locks</h1>
+<h1 id="student-lab-manual">Student lab manual</h1>
+
+<h2 id="lab-scenario">Lab scenario</h2>
+
+<p>You have been asked to create a proof of concept showing how resource locks can be used to prevent accidental deletion or changes. Specifically, you need to:</p>
+
+<ul>
+  <li>
+    <p>create a ReadOnly lock</p>
+  </li>
+  <li>
+    <p>create a Delete lock</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>For all the resources in this lab, we are using the <strong>East US</strong> region. Verify with your instructor this is the region to use for class.</p>
+</blockquote>
+
+<h2 id="lab-objectives">Lab objectives</h2>
+
+<p>In this lab, you will complete the following exercise:</p>
+
+<ul>
+  <li>Exercise 1: Resource Manager Locks</li>
+</ul>
+
+<h2 id="resource-manager-locks-diagram">Resource Manager Locks diagram</h2>
+
+<p><img src="assets/157514986-1bf6a9ea-4c7f-4487-bcd7-542648f8dc95.png" alt="image" /></p>
+
+<h2 id="instructions">Instructions</h2>
+
+<h3 id="exercise-1-resource-manager-locks">Exercise 1: Resource Manager Locks</h3>
+
+<h4 id="estimated-timing-20-minutes">Estimated timing: 20 minutes</h4>
+
+<p>In this exercise, you will complete the following tasks:</p>
+
+<ul>
+  <li>Task 1: Create a resource group with a storage account.</li>
+  <li>Task 2: Add a ReadOnly lock on the storage account.</li>
+  <li>Task 3: Test the ReadOnly lock.</li>
+  <li>Task 4: Remove the ReadOnly lock and create a Delete lock.</li>
+  <li>Task 5: Test the Delete lock.</li>
+</ul>
+
+<h4 id="task-1-create-a-resource-group-with-a-storage-account">Task 1: Create a resource group with a storage account.</h4>
+
+<p>In this task, you will create a resource group and storage account for the lab.</p>
+
+<ol>
+  <li>
+    <p>Sign-in to the Azure portal <strong><code>https://portal.azure.com/</code></strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>: Sign in to the Azure portal using an account that has the Owner or Contributor role in the Azure subscription you are using for this lab.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Open the Cloud Shell by clicking the first icon in the top right of the Azure Portal. If prompted, select <strong>PowerShell</strong> and <strong>Create storage</strong>.</p>
+  </li>
+  <li>
+    <p>Ensure <strong>PowerShell</strong> is selected in the drop-down menu in the upper-left corner of the Cloud Shell pane.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to create a resource group (verify with your instructor regarding the value of the location parameter):</p>
+
+    <pre><code class="language-powershell"> New-AzResourceGroup -Name AZ500LAB03 -Location 'EastUS'
+    
+ Confirm
+ Provided resource group already exists. Are you sure you want to update it?
+ [Y] Yes [N] No [S] Suspend [?] Help (default is "Y"): Y
+</code></pre>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, type <strong>Y</strong> and press the Enter key.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to create a storage account in the newly created resource group:</p>
+
+    <pre><code class="language-powershell"> New-AzStorageAccount -ResourceGroupName AZ500LAB03 -Name (Get-Random -Maximum 999999999999999) -Location  EastUS -SkuName Standard_LRS -Kind StorageV2 
+</code></pre>
+
+    <blockquote>
+      <p><strong>Note</strong>:  Wait until the storage account is created. This might take a couple of minutes.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Close the Cloud Shell pane.</p>
+  </li>
+</ol>
+
+<h4 id="task-2-add-a-readonly-lock-on-the-storage-account">Task 2: Add a ReadOnly lock on the storage account.</h4>
+
+<p>In this task, you will add a read only lock to the storage account. This will protect the resource from accidental deletion or modification.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, in the <strong>Search resources, services, and docs</strong> text box at the top of the Azure portal page, type <strong>Resource groups</strong> and press the <strong>Enter</strong> key.</p>
+  </li>
+  <li>
+    <p>On the <strong>Resource groups</strong> blade, select the <strong>AZ500LAB03</strong> resource group entry.</p>
+  </li>
+  <li>
+    <p>On the <strong>AZ500LAB03</strong> resource group blade, in the list of resources, select the new storage account.</p>
+  </li>
+  <li>
+    <p>In the <strong>Settings</strong> section, click the “Locks” icon.</p>
+  </li>
+  <li>
+    <p>Click <strong>+ Add</strong> and specify the following settings:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lock name</td>
+          <td><strong>ReadOnly Lock</strong></td>
+        </tr>
+        <tr>
+          <td>Lock type</td>
+          <td><strong>Read-only</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>OK</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>:  The storage account is now protected from accidental deletion and modification.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-3-test-the-readonly-lock">Task 3: Test the ReadOnly lock</h4>
+
+<ol>
+  <li>
+    <p>In the <strong>Settings</strong> section of the storage account blade, click <strong>Configuration</strong>.</p>
+  </li>
+  <li>
+    <p>Set the <strong>Secure transfer required</strong> option to <strong>Disabled</strong> and then click <strong>Save</strong>.</p>
+  </li>
+  <li>
+    <p>You should be able to spot a notification stating <strong>Failed to update storage account</strong>.</p>
+  </li>
+  <li>
+    <p>Click the <strong>Notifications</strong> icon in the toolbar at the top of the Azure portal and review the notification, which will resemble the following text:</p>
+
+    <blockquote>
+      <p><strong>“Failed to update storage account ‘xxxxxxxx’. Error: The scope ‘xxxxxxxx’ cannot perform write operation because following scope(s) are locked: ‘/subscriptions/xxxxx-xxx-xxxx-xxxx-xxxxxxxx/resourceGroups/AZ500LAB03/providers/Microsoft.Storage/storageAccounts/xxxxxxx’. Please remove the lock and try again”</strong></p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Return the the <strong>Configuration</strong> blade of the storage account and click <strong>Discard</strong>.</p>
+  </li>
+  <li>
+    <p>On the storage account blade, select <strong>Overview</strong> and, on the <strong>Overview</strong> blade, click <strong>Delete</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Delete storage account</strong> blade, type in the name of the storage account to confirm that you intend to proceed and then click <strong>Delete</strong>.</p>
+  </li>
+  <li>
+    <p>Review the newly generated notification, which will resemble the following text:</p>
+
+    <blockquote>
+      <p><strong>“Failed to delete storage account ‘xxxxxxx’. Error: The scope ‘xxxxxxx’ cannot perform delete operation because following scope(s) are locked: ‘/subscriptions/xxxx-xxxx-xxxx-xxxx-xxxxxx/resourceGroups/AZ500LAB03/providers/Microsoft.Storage/storageAccounts/xxxxxxx’. Please remove the lock and try again.”</strong></p>
+    </blockquote>
+
+    <blockquote>
+      <p><strong>Note</strong>:  You have now verified that a ReadOnly lock will stop accidental deletion and modification of a resource.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="task-4-remove-the-readonly-lock-and-create-a-delete-lock">Task 4: Remove the ReadOnly lock and create a Delete lock.</h4>
+
+<p>In this task, you remove the ReadOnly lock from the storage account and create a Delete lock.</p>
+
+<ol>
+  <li>
+    <p>In the Azure portal, navigate back to the blade displaying properties of the newly created storage account.</p>
+  </li>
+  <li>
+    <p>In the <strong>Settings</strong> section , select <strong>Locks</strong>.</p>
+  </li>
+  <li>
+    <p>On the <strong>Locks</strong> blade, click on the <strong>Delete</strong> icon on the far right of the <strong>ReadOnly Lock</strong> entry.</p>
+  </li>
+  <li>
+    <p>Click <strong>+ Add</strong> and specify the following settings:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lock name</td>
+          <td><strong>Delete Lock</strong></td>
+        </tr>
+        <tr>
+          <td>Lock type</td>
+          <td><strong>Delete</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>Click <strong>OK</strong>.</p>
+  </li>
+</ol>
+
+<h4 id="task-5-test-the-delete-lock">Task 5: Test the Delete lock.</h4>
+
+<p>In this task, you will test the Delete lock. You should be able to modify the storage account, but not delete it.</p>
+
+<ol>
+  <li>
+    <p>In the <strong>Settings</strong> section of the storage account blade, click <strong>Configuration</strong>.</p>
+  </li>
+  <li>
+    <p>Set the <strong>Secure transfer required</strong> option to <strong>Disabled</strong> and then click <strong>Save</strong>.</p>
+
+    <blockquote>
+      <p><strong>Note</strong>:  This time, the change should be successful.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>On the storage account blade, select <strong>Overview</strong> and, on the <strong>Overview</strong> blade, click <strong>Delete</strong>.</p>
+  </li>
+  <li>
+    <p>Review the notification that resembles the following text:</p>
+
+    <blockquote>
+      <p><strong>‘xxxxxx’ can’t be deleted because this resource or its parent has a delete lock. Locks must be removed before this resource can be deleted”</strong></p>
+    </blockquote>
+
+    <blockquote>
+      <p><strong>Note</strong>:  You have now verified that a <strong>Delete</strong> lock will allow configuration changes but stop accidental deletion.</p>
+    </blockquote>
+
+    <blockquote>
+      <p><strong>Note</strong>:  By using Resource Locks you can implement an extra line of defense against accidental or malicious changes and/or deletion of the most important resources. Resource locks can be removed by any user with the <strong>Owner</strong> role, but doing so requires a conscious effort. Locks supplement Role Based Access Control.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<blockquote>
+  <p>Results: In this exercise, you learned to use Resource Manager locks to protect resources from modification and accidental deletion.</p>
+</blockquote>
+
+<p><strong>Clean up resources</strong></p>
+
+<blockquote>
+  <p>Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs.</p>
+</blockquote>
+
+<ol>
+  <li>
+    <p>In the Azure portal, open the Cloud Shell by clicking the first icon in the top right of the Azure Portal. If prompted, click <strong>Reconnect</strong>.</p>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to remove the delete lock:</p>
+
+    <pre><code class="language-powershell"> $storageaccountname = (Get-AzStorageAccount -ResourceGroupName AZ500LAB03).StorageAccountName
+
+ $lockName = (Get-AzResourceLock -ResourceGroupName AZ500LAB03 -ResourceName $storageAccountName -ResourceType Microsoft.Storage/storageAccounts).Name
+
+ Remove-AzResourceLock -LockName $lockName -ResourceName $storageAccountName  -ResourceGroupName AZ500LAB03 -ResourceType Microsoft.Storage/storageAccounts -Force
+</code></pre>
+  </li>
+  <li>
+    <p>In the PowerShell session within the Cloud Shell pane, run the following to remove the resource group:</p>
+
+    <pre><code class="language-powershell">Remove-AzResourceGroup -Name "AZ500LAB03" -Force -AsJob
+</code></pre>
+  </li>
+  <li>
+    <p>Close the <strong>Cloud Shell</strong> pane.</p>
+  </li>
+</ol>
+
+            </article>
+        </main>
+    </div>
+    <footer class="fixed-bottom d-print-none">
+        <nav class="navbar navbar-light bg-light d-flex justify-content-around">
+            <span class="navbar-text">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <a href="https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies" target="_blank" class="ml-2">
+                    MicrosoftLearning/AZ500-AzureSecurityTechnologies
+                </a>
+            </span>
+        </nav>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="assets/script.js"></script>
+</body>
+
+</html>
