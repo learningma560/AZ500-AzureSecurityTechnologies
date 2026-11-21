@@ -127,7 +127,7 @@ In this task, you will create a storage account.
 
 2. On the **Storage accounts** blade in the Azure portal, click the **+ Create** button to create a new storage account.
 
-    ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/73eb9241-d642-455a-a1ff-b504670395c0)
+    ![image](../media/ext/73eb9241-d642-455a-a1ff-b504670395c0.png)
 
 3. On the **Basics** tab of the **Create storage account** blade, specify the following settings (leave others with their default values):
 
@@ -142,7 +142,7 @@ In this task, you will create a storage account.
 
 4. On the **Basics** tab of the **Create storage account** blade, click **Review**, wait for the validation process to complete, and click **Create**.
 
-     ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/d443821c-2ddf-4794-87fa-bfc092980eba)
+     ![image](../media/ext/d443821c-2ddf-4794-87fa-bfc092980eba.png)
 
     >**Note**: Wait for the Storage account to be created. This should take about 2 minutes.
 
@@ -162,7 +162,7 @@ In this task, you will create a data collection rule.
 
 2. On the **Monitor Settings** blade, click **Data Collection Rules.**
 
-  ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/d43e8f94-efb2-4255-9320-210c976fd45e)
+  ![image](../media/ext/d43e8f94-efb2-4255-9320-210c976fd45e.png)
 
 
 3. Click the **+ Create** button to create a new data collection rule.
@@ -179,18 +179,18 @@ In this task, you will create a data collection rule.
     |Platform Type|**Windows**|
     |Data Collection Endpoint|*Leave Blank*|
 
-    ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/9b58c4ce-b7a8-4acf-8289-d95b270a6083)
+    ![image](../media/ext/9b58c4ce-b7a8-4acf-8289-d95b270a6083.png)
 
 
 4. Click on the button labeled **Next: Resources >** to proceed.
    
 6. On the Resources tab, select **+ Add resources,** check **Enable Data Collection Endpoints.** In the Select a scope template, check **AZ500LAB131415,** and click **Apply.**
 
-    ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/d4191115-11bc-43ec-9bee-e84b9b95a821)
+    ![image](../media/ext/d4191115-11bc-43ec-9bee-e84b9b95a821.png)
 
 10. Click on the button labeled **Next: Collect and deliver >** to proceed.
 
-    ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/8294d300-f910-4757-ad52-43c7594ac822)
+    ![image](../media/ext/8294d300-f910-4757-ad52-43c7594ac822.png)
 
 11. Click **+ Add data source**, then on the **Add data source** page, change the **Data source type** drop-down menu to display **Performance Counters.** Leave the following default settings:
 
@@ -202,21 +202,21 @@ In this task, you will create a data collection rule.
     |Disk|60|
     |Network|60|
 
-   ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/a24e44ad-1d10-4533-80e2-bae1b3f6564d)
+   ![image](../media/ext/a24e44ad-1d10-4533-80e2-bae1b3f6564d.png)
 
 11. Click on the button labeled **Next: Destination >** to proceed.
   
 12. Click **+ Add destination**, change the **Destination type** drop-down menu to display **Azure Monitor Logs.** In the **Subscription** window, ensure that your *Subscription* is displayed, then change the **Account or namespace** drop-down menu to reflect your previously created Log Analytics Workspace.
 
-   ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/481843f5-94c4-4a8f-bf51-a10d49130bf8)
+   ![image](../media/ext/481843f5-94c4-4a8f-bf51-a10d49130bf8.png)
 
 11. Click on **Add data source** at the bottom of the page.
     
-    ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/964091e7-bbbc-4ca8-8383-bb2871a1e7f0)
+    ![image](../media/ext/964091e7-bbbc-4ca8-8383-bb2871a1e7f0.png)
 
 13. Click **Review + create.**
 
-    ![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/50dd8407-a106-4540-9e14-ae40a3c04830)
+    ![image](../media/ext/50dd8407-a106-4540-9e14-ae40a3c04830.png)
 
 14. Click **Create.**
 

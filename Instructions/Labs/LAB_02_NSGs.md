@@ -28,7 +28,7 @@ In this lab, you will complete the following exercises:
 
 ## Network and Application Security Groups diagram
 
-![image](https://user-images.githubusercontent.com/91347931/157526438-6da4f68b-db88-4931-a041-8474e66d3fe5.png)
+![image](../media/ext/157526438-6da4f68b-db88-4931-a041-8474e66d3fe5.png)
 
 ## Instructions
 

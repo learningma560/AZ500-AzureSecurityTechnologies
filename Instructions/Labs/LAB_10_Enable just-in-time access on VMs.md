@@ -53,7 +53,7 @@ In this lab, you will complete the following exercises:
 
    - From the **Configured** tab, right-click on the VM to which you want to add a port, and select edit.
 
-   ![image](https://github.com/user-attachments/assets/aa4ded55-c5b1-4d40-b5a0-a4c33b9eb81b)
+   ![image](../media/ext/aa4ded55-c5b1-4d40-b5a0-a4c33b9eb81b.png)
    
    - Under **JIT VM access configuration,** you can either edit the existing settings of an already protected port or add a new custom port.
    - When you've finished editing the ports, select **Save.**   
@@ -72,6 +72,6 @@ In this lab, you will complete the following exercises:
     
         - If JIT is enabled, select **Request access** to pass an access request with the requesting IP, time range, and ports that were configured for that VM.
     
-   ![image](https://github.com/user-attachments/assets/f5d0b67c-7731-4261-b0eb-a56c505dadd4)
+   ![image](../media/ext/f5d0b67c-7731-4261-b0eb-a56c505dadd4.png)
 
 > **Results**: You have explored various methods on how to enable JIT on your VMs and how to request access to VMs that have JIT enabled in Microsoft Defender for Cloud.

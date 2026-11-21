@@ -29,7 +29,7 @@ In this lab, you will complete the following exercises:
 
 ## Role-Based Access Control architecture diagram
 
-![image](https://github.com/MicrosoftLearning/AZ500-AzureSecurityTechnologies/assets/91347931/506cde9c-5242-4438-a793-f88a5434a2b2)
+![image](../media/ext/506cde9c-5242-4438-a793-f88a5434a2b2.png)
 
 ## Instructions
 
